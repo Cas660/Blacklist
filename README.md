@@ -7,9 +7,9 @@ $ conda install bowtie=1.2.3 <br>
 $ pip install argparse numpy pandas <br>
 $ conda install samtools=1.21 <br>
 ## step3：Install Umap version 1.2.1
-Download version 1.2.1 of Umap from the [hoffmangroup/umap project](https://github.com/hoffmangroup/umap)  and extract it. <br>
+Download version 1.2.1 of Umap from the [hoffmangroup/umap project](https://github.com/hoffmangroup/umap/tags)  and extract it. <br>
 $ cd umap-1.2.1/umap <br>
-$ mkdir mappability_data
+$ mkdir mappability_data<br>
 $ cd mappability_data
 ## step4：Download the reference genome files.
 To ensure that the final generated genome blacklist is in the format "chr15 62500 107500 Low Mappability", the first line of the genome file should start with something like >chr1.
