@@ -1,7 +1,7 @@
-# Clone this project.
-$ git clone https://github.com/Cas660/Blacklist
-
-# 1.Install Umap(version 1.2.1) and generate the reference genome mappability data. 
+# 1.Clone this project.
+$ git clone https://github.com/Cas660/Blacklist <br>
+$ cd Blacklist
+# 2. Generate the reference genome mappability data.
 ## step1: Use conda to create an independent environment (Python 2.7)
 $ conda create -n Umap_env python=2.7 <br>
 $ conda activate umap_env
@@ -12,6 +12,7 @@ $ conda install samtools=1.21 <br>
 ## step3：Install Umap version 1.2.1
 Download version 1.2.1 of Umap from the [hoffmangroup/umap project](https://github.com/hoffmangroup/umap/tags)  and extract it. <br>
 $ cd umap-1.2.1/umap <br>
+$ mv ../../
 $ mkdir mappability_data<br>
 $ cd mappability_data
 ## step4：Download the reference genome files.
