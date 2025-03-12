@@ -45,3 +45,5 @@ $ mkdir mappability<br>
 Move all bam files and their index to the input folder.<br>
 Move the mappability files to the mappability folder.<br>
 ![Description](figure/blacklist_image1.png)
+## step3. generate blacklist.
+$ make blacklist
