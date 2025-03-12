@@ -22,7 +22,26 @@ e.g. $ rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/danRer11/bigZips/d
 $ gunzip danRer11.fa.gz
 $ cd ..
 ## step5：Generate genome mappability data
-$ ./Run_Umap.sh mappability_data danRer11.fa.gz "24 36 50 75 100 150 200" -t 8<br>
-This step takes a relatively long time to run, so you can let it run in the background.<br>
 Usage: bash Run_Umap.sh <genome_file> <kmer_list> <br>
+$ ./Run_Umap.sh danRer11.fa.gz 24,36,50,75,100,150,200 <br>
+This step takes a relatively long time to run, so you can let it run in the background.<br>
+
+# 3. Generate blacklist.
+##  step1. install Blacklist(v2.0)
+$ git clone https://github.com/Boyle-Lab/Blacklist<br>
+$ cd Blacklist<br>
+$ rm -rf bamtools<br>
+$ git clone https://github.com/pezmaster31/bamtools.git<br>
+$ cd bamtools<br>
+$ mkdir build<br>
+$ cd build<br>
+$ cmake -DCMAKE_INSTALL_PREFIX:PATH=$(cd ..; pwd)/install ..<br>
+$ make<br>
+$ make install<br>
+$ cd ../..<br>
+## step2.Move the BAM files and mappability files into the "input" and "mappability" folders, respectively.
+$ mkdir input<br>
+$ mkdir mappability<br>
+Move all bam files and their index to the input folder.<br>
+Move the mappability files to the mappability folder.<br>
 
