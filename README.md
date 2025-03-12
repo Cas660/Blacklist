@@ -28,6 +28,8 @@ This step takes a relatively long time to run, so you can let it run in the back
 
 # 3. Generate blacklist.
 ##  step1. install Blacklist(v2.0)
+Before compiling the source code, please ensure that line 149 in blacklist.cpp has been edited to match the length included in the k-mer list from the previous mappability file. Otherwise, the program may incorrectly mark entire chromosomes as blacklist regions. For example, if the k-mer list used to run the Umap software is "50,75", then "int uniqueLength = 36" on line 149 in blacklist.cpp needs to be changed to either "int uniqueLength = 50" or "int uniqueLength = 75".<br>
+![Description](figure/blacklist_image3.png)<br>
 $ git clone https://github.com/Boyle-Lab/Blacklist<br>
 $ cd Blacklist<br>
 $ rm -rf bamtools<br>
@@ -46,4 +48,6 @@ Move all bam files and their index to the input folder.<br>
 Move the mappability files to the mappability folder.<br>
 ![Description](figure/blacklist_image1.png)
 ## step3. generate blacklist.
+First, hard-code the Makefile file by adding the chromosomes you need to generate the genome blacklist as shown in the figure below, and then run the command 'make blacklist' to generate the required blacklist in one go.
+![Description](figure/blacklist_image2.png)
 $ make blacklist
