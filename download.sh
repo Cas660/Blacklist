@@ -1,47 +1,53 @@
 #!/bin/bash
 
-# Check if an input file parameter is provided
+# Check if an input file is provided as an argument
 if [ -z "$1" ]; then
-    echo "Usage: $0 <input_file_path>"
+    echo "Please provide an input file as an argument"
     exit 1
 fi
 
 input_file="$1"
+input_file_name=$(basename "$input_file" .txt)  # Remove the .txt extension
+output_dir="ChIP_process/${input_file_name%_SRR_Acc_List}_SRAfile"  # Dynamically generate the output directory name
 
-# Check if the file exists
+# Check if the input file exists
 if [ ! -f "$input_file" ]; then
     echo "File $input_file does not exist"
     exit 1
 fi
 
-# File to log failed SRR downloads
-failed_srr_log="failed_srr_downloads.log"
-: > "$failed_srr_log"
+# Create the output directory
+mkdir -p "$output_dir"
 
-# Read each line in the file
+# Read each line from the input file
 while IFS= read -r srr_id; do
+    srr_id=$(echo "$srr_id" | xargs)  # Trim leading and trailing spaces
+    if [ -z "$srr_id" ]; then
+        echo "Skipping empty line"
+        continue
+    fi
+
     echo "Downloading SRR ID: $srr_id"
-    retries=0
+    retry_count=0
     success=false
 
-    # Retry download logic
-    while [ $retries -lt 3 ] && [ "$success" = false ]; do
-        prefetch "$srr_id"
-        if [ $? -eq 0 ]; then
+    # Retry downloading up to 3 times
+    while [ $retry_count -lt 3 ]; do
+        if prefetch -O "$output_dir" "$srr_id"; then
             success=true
-            echo "SRR ID: $srr_id downloaded successfully"
+            break
         else
-            retries=$((retries + 1))
-            echo "SRR ID: $srr_id download failed, retrying $retries/3..."
-            sleep 2  # Optional: Wait for a short period between retries
+            retry_count=$((retry_count + 1))
+            echo "Download failed, retrying ($retry_count/3)"
         fi
     done
 
-    # If download fails after 3 attempts, log the failure and move to the next SRR ID
+    # If download fails after 3 attempts, log the failed SRR ID
     if [ "$success" = false ]; then
-        echo "SRR ID: $srr_id download failed, skipped and logged"
-        echo "SRR ID: $srr_id" >> "$failed_srr_log"
+        echo "SRR ID $srr_id failed to download after 3 attempts"
+        echo "$srr_id" >> "${output_dir}/failed_SRRs.txt"
     fi
+
 done < "$input_file"
 
-echo "All download attempts completed, failed SRR IDs logged in $failed_srr_log"
+echo "All downloads completed"
